@@ -1,9 +1,16 @@
 // B-tree.cpp 
 #include <iostream>
+#include"complexInt.h"
 using namespace std;
 
+
+
+
+
+
+
 class TreeNode {
-    int* keys;
+    Complex* keys;
     int t;
     TreeNode** C;
     int n;
@@ -12,11 +19,11 @@ class TreeNode {
 public:
     TreeNode(int temp, bool bool_leaf);
 
-    void insertNonFull(int k);
+    void insertNonFull(Complex k);
     void splitChild(int i, TreeNode* y);
     void traverse();
 
-    TreeNode* search(int k);
+    TreeNode* search(Complex k);
 
     friend class BTree;
 };
@@ -36,18 +43,18 @@ public:
             root->traverse();
     }
 
-    TreeNode* search(int k) {
+    TreeNode* search(Complex k) {
         return (root == NULL) ? NULL : root->search(k);
     }
 
-    void insert(int k);
+    void insert(Complex k);
 };
 
 TreeNode::TreeNode(int t1, bool leaf1) {
     t = t1;
     leaf = leaf1;
 
-    keys = new int[2 * t - 1];
+    keys = new Complex[2 * t - 1];
     C = new TreeNode * [2 * t];
 
     n = 0;
@@ -58,16 +65,16 @@ void TreeNode::traverse() {
     for (i = 0; i < n; i++) {
         if (leaf == false)
             C[i]->traverse();
-        cout << " " << keys[i];
+        cout << " " << keys[i].getString();
     }
 
     if (leaf == false)
         C[i]->traverse();
 }
 
-TreeNode* TreeNode::search(int k) {
+TreeNode* TreeNode::search(Complex k) {
     int i = 0;
-    while (i < n && k > keys[i])
+    while (i < n && (k > keys[i]))
         i++;
 
     if (keys[i] == k)
@@ -79,7 +86,7 @@ TreeNode* TreeNode::search(int k) {
     return C[i]->search(k);
 }
 
-void BTree::insert(int k) {
+void BTree::insert(Complex k) {
     if (root == NULL) {
         root = new TreeNode(t, true);
         root->keys[0] = k;
@@ -104,7 +111,7 @@ void BTree::insert(int k) {
     }
 }
 
-void TreeNode::insertNonFull(int k) {
+void TreeNode::insertNonFull(Complex k) {
     int i = n - 1;
 
     if (leaf == true) {
@@ -161,30 +168,31 @@ int main() {
 
     BTree t(3);
 
-    t.insert(8);
-    t.insert(9);
-    t.insert(10);
-    t.insert(11);
-    t.insert(2);
-    t.insert(16);
-    t.insert(17);
-    t.insert(3);
-    t.insert(20);
-    t.insert(23);
+    t.insert(Complex(12,0));
+    t.insert(Complex(7, 20));
+    t.insert(Complex(10, 2));
+    t.insert(Complex(11, 2));
+    t.insert(Complex(24, 1));
+    t.insert(Complex(5, 22));
+    t.insert(Complex(1, 1));
+    t.insert(Complex(2, 15));
+    t.insert(Complex(9, 22));
+    t.insert(Complex(15, 16));
+    t.insert(Complex(17, 27));
 
     cout << "B-дерево: ";
 
     t.traverse();
 
-    int k = 10;
-
-    (t.search(k) != NULL) 
-        ? cout << endl << k << " найдено"
-        : cout << endl << k << " не найдено";
-
-    k = 29;
+    Complex k = Complex(10, 2);
 
     (t.search(k) != NULL)
-      ? cout << endl << k << " найдено"
-      : cout << endl << k << " не найдено\n";
+        ? cout << endl << k.getString() << " знайдено"
+        : cout << endl << k.getString() << " не знайдено";
+
+    Complex m = Complex(55, 22);
+
+    (t.search(m) != NULL)
+      ? cout << endl << m.getString() << " знайдено"
+      : cout << endl << m.getString() << " не знайдено\n";
 }
